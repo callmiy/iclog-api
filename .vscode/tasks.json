@@ -1,0 +1,139 @@
+{
+  "version": "2.0.0",
+  "presentation": {
+    "reveal": "always",
+    "panel": "new"
+  },
+  "tasks": [
+    {
+      "label": "mix compile",
+      "type": "shell",
+      "command": "dev.bat && mix compile",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "mix get compile",
+      "type": "shell",
+      "command": "dev.bat && mix do deps.get, compile",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning"
+      ],
+      "group": "build"
+    },
+    {
+      "label": "mix test unit",
+      "type": "shell",
+      "command": "dev.bat && mix test",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "mix test file unit",
+      "type": "shell",
+      "command": "mix test ${file}",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "mix test integration",
+      "type": "shell",
+      "command": "dev.bat && cd ..\\front-end-web && yarn build && node scripts/copy-backend.js && cd ${workspaceFolder} && mix test --only integration",
+      "options": {
+        "env": {
+          "ICLOG_PHOENIX_INTEGRATION_TEST_PORT": "4014",
+          "ELM_APP_API_URL": "http://localhost:4014/api"
+        }
+      },
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "mix test integration no build",
+      "type": "shell",
+      "command": "dev.bat && mix test --only integration",
+      "options": {
+        "env": {
+          "ICLOG_PHOENIX_INTEGRATION_TEST_PORT": "4014"
+        }
+      },
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "mix test file integration",
+      "type": "shell",
+      "command": "cd ..\\front-end-web && yarn build && node scripts/copy-backend.js && cd ${workspaceFolder} && mix test --only integration ${file}",
+      "options": {
+        "env": {
+          "ICLOG_PHOENIX_INTEGRATION_TEST_PORT": "4014",
+          "ELM_APP_API_URL": "http://localhost:4014/api"
+        }
+      },
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "mix test file integration no build",
+      "type": "shell",
+      "command": "mix test --only integration ${file}",
+      "options": {
+        "env": {
+          "ICLOG_PHOENIX_INTEGRATION_TEST_PORT": "4014"
+        }
+      },
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "start backend",
+      "type": "shell",
+      "command": "iex --werl -S mix phx.server",
+      "options": {
+        "env": {
+          "ICLOG_PHOENIX_PORT": "4013"
+        }
+      },
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "build"
+    }
+  ]
+}

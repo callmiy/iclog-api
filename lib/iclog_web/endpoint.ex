@@ -17,7 +17,7 @@ defmodule IclogWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     gzip: false,
-    from:  "front-end-web/build",
+    from:  "web-client",
     only_matching: ~w(index.html favicon manifest robots.txt static service)
 
   # Code reloading can be explicitly enabled under the
