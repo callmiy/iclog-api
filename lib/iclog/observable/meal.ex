@@ -5,12 +5,17 @@ defmodule Iclog.Observable.Meal do
 
   alias Iclog.Repo
   alias Iclog.Observable.Meal
+  alias Iclog.Comment
 
+  @timestamps_opts [
+    type: Timex.Ecto.DateTime,
+    autogenerate: {Timex.Ecto.DateTime, :autogenerate, []}
+  ]
 
   schema "meals" do
     field :meal, :string
-    field :time, :utc_datetime
-    field :comment, :string
+    field :time, Timex.Ecto.DateTime
+    has_many :comments, {"meal_comments", Comment}, foreign_key: :comment_id
 
     timestamps()
   end
@@ -18,7 +23,7 @@ defmodule Iclog.Observable.Meal do
   @doc false
   def changeset(%Meal{} = meal, attrs) do
     meal
-    |> cast(attrs, [:meal, :time, :comment])
+    |> cast(attrs, [:meal, :time])
     |> validate_required([:meal, :time])
   end
 

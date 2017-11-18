@@ -17,6 +17,7 @@ defmodule Iclog.DataCase do
   using do
     quote do
       alias Iclog.Repo
+      alias alias Iclog.Factory.MealComment, as: MealCommentFactory
 
       import Ecto
       import Ecto.Changeset

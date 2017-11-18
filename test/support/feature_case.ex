@@ -6,6 +6,7 @@ defmodule Iclog.FeatureCase do
       use Hound.Helpers
 
       alias Iclog.Repo
+      alias alias Iclog.Factory.MealComment, as: MealCommentFactory
 
       import IclogWeb.Router.Helpers
       import Iclog.Factory
@@ -128,7 +129,7 @@ defmodule Iclog.FeatureCase do
     |> Timex.to_datetime(Timex.Timezone.local())
 
     date_str = date_
-    |> Timex.format!(datetime_format_str)
+    |> Timex.format!(datetime_format_str())
     {date_, date_str}
   end
 

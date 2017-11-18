@@ -3,48 +3,31 @@ defmodule Iclog.ObservableTest do
 
     alias Iclog.Observable.Meal
 
-    @valid_attrs %{
-      meal: "rice",
-      comment: "some comment",
-      time: "2010-04-17T14:00:00.000000Z"
-    }
-    
-    @update_attrs %{
-      meal: "potato",
-      comment: "some updated comment",
-      time: "2011-05-18T15:01:01.000000Z"
-    }
+    @now Timex.now()
+
+    @meal "rice"
+
+    @updated_meal "potato"
 
     @invalid_attrs %{
       meal: nil,
-      comment: nil, 
       time: nil
     }
 
-    def meal_fixture(attrs \\ %{}) do
-      {:ok, meal} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Meal.create()
-
-      meal
-    end
-
     test "list/0 returns all meals" do
-      meal = meal_fixture()
-      assert Meal.list() == [meal]
+      meal = normalize_time(insert :meal)
+      assert (Meal.list() |> List.first() |> normalize_time()) == meal
     end
 
     test "get!/1 returns the meal with given id" do
-      meal = meal_fixture()
-      assert Meal.get!(meal.id) == meal
+      meal = insert :meal
+      assert normalize_time(Meal.get!(meal.id)) == normalize_time(meal)
     end
 
     test "create/1 with valid data creates a meal" do
-      assert {:ok, %Meal{} = meal} = Meal.create(@valid_attrs)
-      assert meal.meal == "rice"
-      assert meal.comment == "some comment"
-      assert meal.time == DateTime.from_naive!(~N[2010-04-17T14:00:00.000000Z], "Etc/UTC")
+      assert {:ok, %Meal{} = meal} = Meal.create(%{meal: @meal, time: @now})
+      assert meal.meal == @meal
+      assert meal.time == @now
     end
 
     test "create/1 with invalid data returns error changeset" do
@@ -52,29 +35,35 @@ defmodule Iclog.ObservableTest do
     end
 
     test "update/2 with valid data updates the meal" do
-      meal = meal_fixture()
-      assert {:ok, meal} = Meal.update(meal, @update_attrs)
+      updated_time = Timex.shift @now, days: 1
+      meal = insert :meal, time: @now
+      assert {:ok, meal} = Meal.update(meal, %{meal: @updated_meal, time: updated_time})
       assert %Meal{} = meal
-      assert meal.meal == "potato"
-      assert meal.comment == "some updated comment"
-      assert meal.time == DateTime.from_naive!(~N[2011-05-18T15:01:01.000000Z], "Etc/UTC")
+      assert meal.meal ==  @updated_meal
+      assert meal.time == updated_time
     end
 
     test "update/2 with invalid data returns error changeset" do
-      meal = meal_fixture()
+      meal = insert :meal
       assert {:error, %Ecto.Changeset{}} = Meal.update(meal, @invalid_attrs)
-      assert meal == Meal.get!(meal.id)
+      assert normalize_time(meal) == normalize_time(Meal.get!(meal.id))
     end
 
     test "delete/1 deletes the meal" do
-      meal = meal_fixture()
+      meal = insert :meal
       assert {:ok, %Meal{}} = Meal.delete(meal)
       assert_raise Ecto.NoResultsError, fn -> Meal.get!(meal.id) end
     end
 
     test "change/1 returns a meal changeset" do
-      meal = meal_fixture()
-      assert %Ecto.Changeset{} = Meal.change(meal)
+      assert %Ecto.Changeset{} = Meal.change(insert :meal)
     end
-  
+
+    defp normalize_time(%Meal{time: time} = meal) do
+      %{meal |
+        time: %{time |
+          microsecond: {0, 0} }
+      }
+    end
+
 end

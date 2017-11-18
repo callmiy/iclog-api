@@ -3,6 +3,7 @@ defmodule Iclog.Factory do
 
   alias Iclog.Observable.Observation
   alias Iclog.Observable.ObservationMeta
+  alias Iclog.Observable.Meal
 
   def observation_meta_factory do
     %ObservationMeta{
@@ -15,6 +16,13 @@ defmodule Iclog.Factory do
     %Observation{
       comment: sequence("some comment"),
       observation_meta: build(:observation_meta),
+    }
+  end
+
+  def meal_factory do
+    %Meal{
+      meal: sequence("meal-"),
+      time: Timex.now()
     }
   end
 end
