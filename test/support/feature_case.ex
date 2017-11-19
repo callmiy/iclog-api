@@ -11,6 +11,7 @@ defmodule Iclog.FeatureCase do
       import IclogWeb.Router.Helpers
       import Iclog.Factory
       import Iclog.FeatureCase
+      import Iclog.TestHelper
 
       @endpoint IclogWeb.Endpoint
 

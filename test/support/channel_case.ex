@@ -20,6 +20,7 @@ defmodule IclogWeb.ChannelCase do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
       import Iclog.Factory
+      import Iclog.TestHelper
 
       # The default endpoint for testing
       @endpoint IclogWeb.Endpoint

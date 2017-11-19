@@ -1,64 +1,68 @@
 defmodule Iclog.Observable.ObservationTest do
   use Iclog.DataCase
-  import Iclog.Observable.Observation.TestHelper
 
   alias Iclog.Observable.Observation
-  alias Iclog.Observable.ObservationMeta.TestHelper, as: ObservationMetaHelper
   alias Iclog.Observable.ObservationMeta
 
   describe "observation" do
     test "list/0 returns all observations" do
-      observation = fixture()
-      assert Observation.list() == [observation]
+      %ObservationMeta{id: meta_id} = insert :observation_meta
+      observation_ = build :observation_no_meta
+      %Observation{id: id} = Repo.insert! Map.put(observation_, :observation_meta_id, meta_id)
+      assert [%Observation{id: ^id}] = Observation.list()
     end
 
     test "list/1 returns all observations with meta preloaded" do
-      %ObservationMeta{id: meta_id} = ObservationMetaHelper.fixture
-      %Observation{id: id} = valid_attrs(:no_meta)
-        |> Map.put_new(:observation_meta_id, meta_id)
-        |> fixture()
+      %Observation{
+        id: id, observation_meta: %ObservationMeta{id: meta_id}
+      } = insert :observation
 
-      assert [ %Observation{
-          id: ^id,
-          observation_meta: %ObservationMeta{id: ^meta_id}  
-      } ] = Observation.list(:with_meta)
+      assert [%Observation{
+        id: ^id,
+        observation_meta: %ObservationMeta{id: ^meta_id}
+      }] = Observation.list(:with_meta)
     end
 
     test "get!/1 returns the observation with given id" do
-      observation = fixture()
-      assert Observation.get!(observation.id) == observation
+      %Observation{id: id} = insert :observation
+      assert %Observation{id: ^id} = Observation.get!(id)
     end
 
     test "create/1 with valid data creates a observation" do
-       assert {:ok, %Observation{} = observation} = Observation.create(valid_attrs(:with_meta))
+      %ObservationMeta{id: meta_id} = insert :observation_meta
+      assert {:ok, %Observation{} = observation} =
+        Observation.create(%{comment: "some comment", observation_meta_id: meta_id})
       assert observation.comment == "some comment"
     end
 
     test "create/2 with valid data creates a observation" do
-      assert {:ok, %{id: _, meta: %{id: _}}} = valid_attrs(:no_meta)
-        |> Observation.create(ObservationMetaHelper.valid_attrs())
+      assert {:ok, %{id: _, meta: %{id: _}}} =
+        Observation.create(
+          %{comment: "some comment"},
+          %{title: "some title"}
+        )
     end
 
     test "create/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Observation.create(invalid_attrs())
+      assert {:error, %Ecto.Changeset{}} = Observation.create(%{})
     end
 
     test "update/2 with valid data updates the observation" do
-      observation = fixture()
-      assert {:ok, observation} = Observation.update(observation, update_attrs())
+      observation = insert :observation
+      assert {:ok, observation} = Observation.update(observation, %{comment: "some updated comment"})
       assert %Observation{} = observation
       assert observation.comment == "some updated comment"
     end
 
     test "delete/1 deletes the observation" do
-      observation = fixture()
+      observation = insert :observation
       assert {:ok, %Observation{}} = Observation.delete(observation)
       assert_raise Ecto.NoResultsError, fn -> Observation.get!(observation.id) end
     end
 
     test "change/1 returns a observation changeset" do
-      observation = fixture()
+      observation = insert :observation
       assert %Ecto.Changeset{} = Observation.change(observation)
     end
-  end  
+  end
 end

@@ -19,6 +19,12 @@ defmodule Iclog.Factory do
     }
   end
 
+  def observation_no_meta_factory do
+    %Observation{
+      comment: sequence("some comment")
+    }
+  end
+
   def meal_factory do
     %Meal{
       meal: sequence("meal-"),

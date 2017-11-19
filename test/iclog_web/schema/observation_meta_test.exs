@@ -1,6 +1,6 @@
 defmodule IclogWeb.Schema.ObservationMetaTest do
   use Iclog.DataCase
-  import Iclog.Observable.ObservationMeta.TestHelper
+  import Iclog.ObservationMetaTestHelper
 
   alias Iclog.Observable.Observation
   alias Iclog.Observable.ObservationMeta

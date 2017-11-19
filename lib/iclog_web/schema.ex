@@ -13,7 +13,7 @@ defmodule IclogWeb.Schema do
   end
 
   mutation do
-    import_fields :Observation_mutations
+    import_fields :observation_mutations
     import_fields :meal_mutations
   end
 end

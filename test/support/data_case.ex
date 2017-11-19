@@ -24,6 +24,7 @@ defmodule Iclog.DataCase do
       import Ecto.Query
       import Iclog.DataCase
       import Iclog.Factory
+      import Iclog.TestHelper
     end
   end
 

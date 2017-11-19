@@ -7,6 +7,10 @@ defmodule Iclog.Observable.ObservationMeta do
   alias Iclog.Observable.ObservationMeta
   alias Iclog.Observable.Observation
 
+  @timestamps_opts [
+    type: Timex.Ecto.DateTime,
+    autogenerate: {Timex.Ecto.DateTime, :autogenerate, []}
+  ]
 
   schema "observation_metas" do
     field :intro, :string

@@ -20,6 +20,7 @@ defmodule IclogWeb.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       import IclogWeb.Router.Helpers
+      import Iclog.TestHelper
 
       # The default endpoint for testing
       @endpoint IclogWeb.Endpoint

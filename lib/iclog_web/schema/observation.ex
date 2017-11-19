@@ -70,10 +70,10 @@ defmodule IclogWeb.Schema.Observation do
   end
 
   @desc "Create an observation"
-  object :Observation_mutations do
+  object :observation_mutations do
 
     @desc "Create an observation with its metadata simulatenously"
-    field :observation_mutation_with_meta, type: :observation do
+    field :observation_with_meta, type: :observation do
       arg :comment, non_null(:string)
       arg :meta, non_null(:meta)
 
@@ -91,7 +91,7 @@ defmodule IclogWeb.Schema.Observation do
     end
 
     @desc "Create an observation with existing meta"
-    field :observation_mutation, type: :observation do
+    field :observation, type: :observation do
       arg :comment, non_null(:string)
       arg :meta_id, non_null(:id)
 
@@ -117,7 +117,7 @@ defmodule IclogWeb.Schema.Observation do
       end
     end
     @desc "Update an observation"
-    field :observation_mutation_update, type: :observation do
+    field :observation_update, type: :observation do
       arg :id, non_null(:id)
       arg :comment, :string
       arg :inserted_at, :string

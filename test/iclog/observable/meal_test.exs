@@ -15,20 +15,20 @@ defmodule Iclog.ObservableTest do
     }
 
     test "list/0 returns all meals" do
-      meal = normalize_time(insert :meal)
-      assert (Meal.list() |> List.first() |> normalize_time()) == meal
+      meal = normalize(insert :meal)
+      assert (Meal.list() |> List.first() |> normalize()) == meal
     end
 
     test "get!/1 returns the meal with given id" do
       meal = insert :meal
-      assert normalize_time(Meal.get!(meal.id)) == normalize_time(meal)
+      assert normalize(Meal.get!(meal.id)) == normalize(meal)
     end
 
     test "get/1 returns the meal with given id and associated comments" do
-      meal = normalize_time(insert :meal)
+      meal = normalize(insert :meal)
       comments = MealCommentFactory.create :comment, meal: meal
 
-      meal_ = normalize_time(Meal.get meal.id)
+      meal_ = normalize(Meal.get meal.id)
       assert meal_ == %{meal | comments: [comments]}
     end
 
@@ -59,7 +59,7 @@ defmodule Iclog.ObservableTest do
     test "update/2 with invalid data returns error changeset" do
       meal = insert :meal
       assert {:error, %Ecto.Changeset{}} = Meal.update(meal, @invalid_attrs)
-      assert normalize_time(meal) == normalize_time(Meal.get!(meal.id))
+      assert normalize(meal) == normalize(Meal.get!(meal.id))
     end
 
     test "delete/1 deletes the meal" do
@@ -72,11 +72,8 @@ defmodule Iclog.ObservableTest do
       assert %Ecto.Changeset{} = Meal.change(insert :meal)
     end
 
-    defp normalize_time(%Meal{time: time} = meal) do
-      %{meal |
-        time: %{time |
-          microsecond: {0, 0} }
-      }
+    defp normalize(%Meal{time: time} = meal) do
+      %{meal | time: normalize_time(time)}
     end
 
 end

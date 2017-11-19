@@ -8,6 +8,10 @@ defmodule Iclog.Observable.Observation do
   alias Iclog.Observable.ObservationMeta
   alias IclogWeb.PaginationHelper
 
+  @timestamps_opts [
+    type: Timex.Ecto.DateTime,
+    autogenerate: {Timex.Ecto.DateTime, :autogenerate, []}
+  ]
 
   schema "observations" do
     field :comment, :string
