@@ -19,7 +19,7 @@ defmodule IclogWeb.Schema.Observation do
     field :updated_at, :i_s_o_datetime
   end
 
-  object :paginated_obervation do
+  object :paginated_observation do
     field :entries, list_of(:observation)
     field :pagination, :pagination
   end
@@ -49,7 +49,7 @@ defmodule IclogWeb.Schema.Observation do
       end
     end
 
-    field :paginated_observations, :paginated_obervation do
+    field :paginated_observations, :paginated_observation do
       arg :pagination, non_null(:pagination_params)
 
       resolve fn(args, _info) ->

@@ -28,6 +28,12 @@ defmodule IclogWeb.Schema.Meal do
     field :updated_at, :i_s_o_datetime
   end
 
+  @desc "List of observations, but paginated"
+  object :paginated_meal do
+    field :entries, list_of(:meal)
+    field :pagination, :pagination
+  end
+
   object :meal_query do
     field :meal, type: :meal do
       arg :id, non_null(:id)
@@ -42,10 +48,20 @@ defmodule IclogWeb.Schema.Meal do
         end
       end
     end
+
     field :meals, list_of(:meal) do
 
       resolve fn(_args, _info) ->
         {:ok, Meal.list_all()}
+      end
+    end
+
+    field :paginated_meals, :paginated_meal do
+      arg :pagination, non_null(:pagination_params)
+
+      resolve fn(args, _info) ->
+        pagination_params = Map.get(args, :pagination, nil)
+        {:ok, Meal.list_all(pagination_params)}
       end
     end
   end

@@ -22,6 +22,8 @@ defmodule IclogWeb.ChannelCase do
       import Iclog.Factory
       import Iclog.TestHelper
 
+      alias Iclog.Factory.MealComment, as: MealCommentFactory
+
       # The default endpoint for testing
       @endpoint IclogWeb.Endpoint
     end

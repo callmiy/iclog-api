@@ -6,6 +6,7 @@ defmodule Iclog.Observable.Meal do
   alias Iclog.Repo
   alias Iclog.Observable.Meal
   alias Iclog.Comment
+  alias IclogWeb.PaginationHelper
 
   @timestamps_opts [
     type: Timex.Ecto.DateTime,
@@ -42,12 +43,21 @@ defmodule Iclog.Observable.Meal do
   def list do
     Repo.all(Meal)
   end
-  def list_all do
-    Enum.uniq(
-      Repo.all from m in Meal,
-      join: c in assoc(m, :comments),
+
+  def list_all(params \\ nil) do
+    query = from m in Meal,
+      order_by: [desc: m.inserted_at, desc: m.id],
       preload: [:comments]
-    )
+
+    if params == nil do
+      Repo.all query
+    else
+      page = Repo.paginate(query, params)
+      %{
+        entries: page.entries,
+        pagination: PaginationHelper.page_to_map(page)
+      }
+    end
   end
 
   @doc """

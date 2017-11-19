@@ -80,6 +80,72 @@ defmodule IclogWeb.Schema.MealTest do
 
       assert length(comments) == 3
     end
+
+    test ":paginated_meals page number 1 succeeds" do
+      insert_list(11, :meal)
+      {query, params} = query(:paginated_meals, 1)
+
+      {:ok, %{
+          data: %{
+            "paginatedMeals" => %{
+              "entries" => obs,
+              "pagination" => %{
+                "totalEntries" => 11,
+                "pageNumber" => 1,
+                "pageSize" => 10,
+                "totalPages" => 2,
+              }
+            }
+          }
+        }
+      } = Absinthe.run(query, Schema, variables: params)
+
+      assert length(obs) == 10
+
+      assert %{
+        "id" => _,
+        "meal" => _,
+        "time" => _,
+        "insertedAt" => _,
+        "updatedAt" => _,
+        "comments" => []
+      } = List.first(obs)
+    end
+
+    test ":paginated_meals page number 2 succeeds" do
+      insert_list(11, :meal)
+      |> Enum.each(&MealCommentFactory.create(:comment, meal: &1))
+
+      {query, params} = query(:paginated_meals, 2)
+
+      {:ok, %{
+          data: %{
+            "paginatedMeals" => %{
+              "entries" => obs,
+              "pagination" => %{
+                "totalEntries" => 11,
+                "pageNumber" => 2,
+                "pageSize" => 10,
+                "totalPages" => 2,
+              }
+            }
+          }
+        }
+      } = Absinthe.run(query, Schema, variables: params)
+
+      assert [%{
+        "id" => _,
+        "meal" => _,
+        "time" => _,
+        "insertedAt" => _,
+        "updatedAt" => _,
+        "comments" => [%{
+          "id" => _,
+          "text" => _,
+          "insertedAt" => _,
+        }]
+      }] = obs
+    end
   end
 
   describe "mutation" do
@@ -95,6 +161,25 @@ defmodule IclogWeb.Schema.MealTest do
 
       assert {:ok, %{errors: _}} =
         Absinthe.run(query, Schema, variables: params)
+    end
+
+    test ":meal with comment succeeds" do
+      {query, params} = mutation(:meal_with_comment)
+
+      assert {
+        :ok, %{
+          data: %{
+            "meal" => %{
+              "id" => _,
+              "comments" => [%{
+                "text" => text,
+              }]
+            }
+          }
+        }
+      } = Absinthe.run(query, Schema, variables: params)
+
+      assert text == "Der jollof smerks gut!"
     end
 
     test ":meal_comment succeeds" do
