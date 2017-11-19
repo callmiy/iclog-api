@@ -6,7 +6,7 @@ defmodule Iclog.FeatureCase do
       use Hound.Helpers
 
       alias Iclog.Repo
-      alias alias Iclog.Factory.MealComment, as: MealCommentFactory
+      alias Iclog.Factory.MealComment, as: MealCommentFactory
 
       import IclogWeb.Router.Helpers
       import Iclog.Factory

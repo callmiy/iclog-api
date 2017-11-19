@@ -24,6 +24,18 @@ defmodule Iclog.ObservableTest do
       assert normalize_time(Meal.get!(meal.id)) == normalize_time(meal)
     end
 
+    test "get/1 returns the meal with given id and associated comments" do
+      meal = normalize_time(insert :meal)
+      comments = MealCommentFactory.create :comment, meal: meal
+
+      meal_ = normalize_time(Meal.get meal.id)
+      assert meal_ == %{meal | comments: [comments]}
+    end
+
+    test "get/1 with wrong meal id returns nil" do
+      assert nil == Meal.get(0)
+    end
+
     test "create/1 with valid data creates a meal" do
       assert {:ok, %Meal{} = meal} = Meal.create(%{meal: @meal, time: @now})
       assert meal.meal == @meal
@@ -36,7 +48,8 @@ defmodule Iclog.ObservableTest do
 
     test "update/2 with valid data updates the meal" do
       updated_time = Timex.shift @now, days: 1
-      meal = insert :meal, time: @now
+      meal_ = insert :meal, time: @now
+      meal = %{meal_ | comments: []}
       assert {:ok, meal} = Meal.update(meal, %{meal: @updated_meal, time: updated_time})
       assert %Meal{} = meal
       assert meal.meal ==  @updated_meal

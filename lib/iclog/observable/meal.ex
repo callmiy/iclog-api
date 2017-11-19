@@ -35,9 +35,19 @@ defmodule Iclog.Observable.Meal do
       iex> list()
       [%Meal{}, ...]
 
+      iex> list_all()
+      [%Meal{comments: %Comment{}}, ...]
+
   """
   def list do
     Repo.all(Meal)
+  end
+  def list_all do
+    Enum.uniq(
+      Repo.all from m in Meal,
+      join: c in assoc(m, :comments),
+      preload: [:comments]
+    )
   end
 
   @doc """
@@ -55,6 +65,15 @@ defmodule Iclog.Observable.Meal do
 
   """
   def get!(id), do: Repo.get!(Meal, id)
+  def get(id) do
+    case Repo.get(Meal, id) do
+      nil ->
+        nil
+      meal ->
+        comments = Repo.all Ecto.assoc(meal, :comments)
+        %{meal | comments: comments}
+    end
+  end
 
   @doc """
   Creates a meal.
@@ -68,6 +87,17 @@ defmodule Iclog.Observable.Meal do
       {:error, %Ecto.Changeset{}}
 
   """
+  def create(%{comment: nil} = attrs) do
+    {_, attrs_} = Map.pop attrs, :comment
+    create(attrs_)
+  end
+  def create(%{comment: %{text: _}} = attrs) do
+    {comment_, attrs_} = Map.pop attrs, :comment
+    with {:ok, meal} <- create(attrs_),
+         {:ok, comment} <- Repo.insert(Ecto.build_assoc meal, :comments, comment_) do
+     {:ok, %{meal | comments: [comment]}}
+    end
+  end
   def create(attrs \\ %{}) do
     %Meal{}
     |> Meal.changeset(attrs)
@@ -87,9 +117,11 @@ defmodule Iclog.Observable.Meal do
 
   """
   def update(%Meal{} = meal, attrs) do
-    meal
-    |> Meal.changeset(attrs)
-    |> Repo.update()
+    chgset = Meal.changeset(meal, attrs)
+    with {:ok, meal_} <- Repo.update(chgset) do
+      comments = Repo.all Ecto.assoc(meal_, :comments)
+      {:ok, %{meal_ | comments: comments}}
+    end
   end
 
   @doc """
@@ -119,5 +151,21 @@ defmodule Iclog.Observable.Meal do
   """
   def change(%Meal{} = meal) do
     Meal.changeset(meal, %{})
+  end
+
+   @doc """
+  Creates comment for a meal.
+
+  ## Examples
+
+      iex> create_comment(meal, %{text: value})
+      {:ok, %Meal{comments: []}}
+
+      iex> create_comment(meal, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_comment(%Meal{} = meal, %{text: _} = attrs) do
+    Repo.insert(Ecto.build_assoc meal, :comments, attrs)
   end
 end

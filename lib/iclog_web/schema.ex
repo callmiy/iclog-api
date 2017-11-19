@@ -4,13 +4,16 @@ defmodule IclogWeb.Schema do
   import_types IclogWeb.Schema.Types
   import_types IclogWeb.Schema.Observation
   import_types IclogWeb.Schema.ObservationMeta
+  import_types IclogWeb.Schema.Meal
 
   query do
     import_fields :observation_query
     import_fields :observation_meta_query
+    import_fields :meal_query
   end
 
   mutation do
     import_fields :Observation_mutations
+    import_fields :meal_mutations
   end
 end
