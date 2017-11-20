@@ -11,12 +11,18 @@ defmodule IclogWeb.Feature.ObservationListTest do
   @tag :integration
   # @tag :no_headless
   test "List observations", _meta do
+    %ObservationMeta{
+      id: meta_id,
+      title: title_first
+    } = insert :observation_meta, title: "The very first title of all"
+
+    obs_chgset = build :observation_no_meta, comment: "The very first observation of all"
+
     %Observation{
       id: id_first,
       comment: comment_first,
-      inserted_at: inserted_at_first_,
-      observation_meta: %ObservationMeta{title: title_first}
-    } = insert(:observation, comment: "The very first observation of all")
+      inserted_at: inserted_at_first_
+    } = Repo.insert!(%{obs_chgset | observation_meta_id: meta_id})
 
     obs = insert_list(10, :observation)
 

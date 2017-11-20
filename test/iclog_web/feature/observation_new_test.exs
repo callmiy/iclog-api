@@ -27,7 +27,7 @@ defmodule IclogWeb.Feature.ObservationNewTest do
   test "Create observable with new meta", _meta do
     navigate_to "/#/observations/new"
     assert visible_text({:class, "global-title"}) == "OBSERVABLES"
-    assert visible_text({:class, "page-title"}) == "Observations"
+    assert visible_text({:class, "page-title"}) == "Observation"
 
     # submit and reset buttons are disabled
     submit_btn = find_element(:name, @submit_btn_name)

@@ -4,53 +4,40 @@ defmodule IclogWeb.MealChannel do
   alias IclogWeb.Schema
 
   def join("meal:meal", %{"params" => params, "query" => query}, socket) do
-    {_, {:ok, val}, _} = respond(query, params, socket)
+    {:ok, val} = respond(query, params)
     {:ok, val, socket}
   end
 
-  def handle_in(
-      "new_meal",
-      %{ "query" => mutation, "params" => params },
-      socket) do
-
-    with {_, {:ok, %{data: %{"meal" => data}} }, _} <- respond(mutation, params, socket) do
+  def handle_in("new_meal", %{ "query" => mutation, "params" => params}, socket) do
+    with {:ok, %{data: %{"meal" => data}} } <- respond(mutation, params) do
       broadcast socket, "meal_created", %{data: %{"meal" => data}}
       {:reply, {:ok,  %{"id" => data["id"]} }, socket}
+    else
+      error -> {:reply, error, socket}
     end
   end
-  def handle_in(
-      "list_meals",
-      %{"query" => query, "params" => params },
-      socket) do
-    respond(query, params, socket)
+  def handle_in("list_meals", %{"query" => query, "params" => params}, socket) do
+    {:reply, respond(query, params), socket}
   end
-  def handle_in(
-      "get_meal",
-      %{"query" => query, "params" => params },
-      socket) do
-    respond(query, params, socket)
+  def handle_in( "get_meal", %{"query" => query, "params" => params }, socket) do
+    {:reply, respond(query, params), socket}
   end
-  def handle_in(
-      "update_meal",
-      %{"query" => mutation, "params" => params },
-      socket) do
-
-    with {_, {:ok, %{data: %{"mealUpdate" => data}} }, _} <- respond(mutation, params, socket) do
+  def handle_in("update_meal", %{"query" => mutation, "params" => params}, socket) do
+    with {:ok, %{data: %{"mealUpdate" => data}} } <- respond(mutation, params) do
       broadcast socket, "meal_updated", Map.delete(data, "comments")
       {:reply, {:ok, %{data: %{"mealUpdate" => data}} }, socket}
+    else
+      error -> {:reply, error, socket}
     end
   end
 
-  defp respond(query, params, socket, broadcast_name \\ nil) do
-    response Absinthe.run(query, Schema, variables: params), socket, broadcast_name
+  defp respond(query, params) do
+    respond Absinthe.run(query, Schema, variables: params)
   end
-  defp response({:ok, %{errors: error}}, socket, _broadcast_name) do
-    {:reply, {:error, %{errors: error}}, socket}
+  defp respond({:ok, %{errors: error}}) do
+    {:error, %{errors: error}}
   end
-  defp response({:ok, data}, socket, broadcast_name \\ nil) do
-    if broadcast_name do
-      broadcast socket, broadcast_name, data
-    end
-    {:reply, {:ok, data}, socket}
+  defp respond({:ok, data}) do
+    {:ok, data}
   end
 end
