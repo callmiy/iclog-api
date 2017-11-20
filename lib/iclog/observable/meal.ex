@@ -46,7 +46,7 @@ defmodule Iclog.Observable.Meal do
 
   def list_all(params \\ nil) do
     query = from m in Meal,
-      order_by: [desc: m.inserted_at, desc: m.id],
+      order_by: [desc: m.time, desc: m.id],
       preload: [:comments]
 
     if params == nil do
