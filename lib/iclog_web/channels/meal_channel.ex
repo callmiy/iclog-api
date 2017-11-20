@@ -12,7 +12,11 @@ defmodule IclogWeb.MealChannel do
       "new_meal",
       %{ "query" => mutation, "params" => params },
       socket) do
-    respond(mutation, params, socket, "meal_created")
+
+    with {_, {:ok, %{data: %{"meal" => data}} }, _} <- respond(mutation, params, socket) do
+      broadcast socket, "meal_created", %{data: %{"meal" => data}}
+      {:reply, {:ok,  %{"id" => data["id"]} }, socket}
+    end
   end
   def handle_in(
       "list_meals",

@@ -60,7 +60,7 @@ defmodule IclogWeb.MealChannelTest do
       assert_reply(
         ref,
         :ok,
-        %{data:  %{"meal" => %{"id" => _, "comments" => _}}}
+        %{"id" => _}
       )
 
       assert_push(
