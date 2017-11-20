@@ -152,7 +152,7 @@ defmodule IclogWeb.Schema.MealTest do
     test ":meal succeeds" do
       {query, params} = mutation(:meal)
 
-      assert {:ok, %{data: %{"meal" => %{"id" => _} } }} =
+      assert {:ok, %{data: %{"meal" => %{"id" => _, "comments" => []} } }} =
         Absinthe.run(query, Schema, variables: params)
     end
 

@@ -109,9 +109,11 @@ defmodule Iclog.Observable.Meal do
     end
   end
   def create(attrs \\ %{}) do
-    %Meal{}
-    |> Meal.changeset(attrs)
-    |> Repo.insert()
+    changes = Meal.changeset(%Meal{}, attrs)
+
+    with {:ok, meal} <- Repo.insert(changes) do
+      {:ok, Repo.preload(meal, [:comments])}
+    end
   end
 
   @doc """
