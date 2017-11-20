@@ -163,7 +163,7 @@ defmodule IclogWeb.MealChannelTest do
 
       assert_push(
         "meal_updated",
-        %{data:  %{"mealUpdate" => %{"id" => _, "comments" => _}}}
+        %{"id" => _id, "time" => _, "meal" => _}
       )
     end
 

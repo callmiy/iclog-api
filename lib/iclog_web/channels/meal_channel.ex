@@ -32,10 +32,13 @@ defmodule IclogWeb.MealChannel do
   end
   def handle_in(
       "update_meal",
-      %{"query" => query, "params" => params },
+      %{"query" => mutation, "params" => params },
       socket) do
 
-    respond(query, params, socket, "meal_updated")
+    with {_, {:ok, %{data: %{"mealUpdate" => data}} }, _} <- respond(mutation, params, socket) do
+      broadcast socket, "meal_updated", Map.delete(data, "comments")
+      {:reply, {:ok, %{data: %{"mealUpdate" => data}} }, socket}
+    end
   end
 
   defp respond(query, params, socket, broadcast_name \\ nil) do
