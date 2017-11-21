@@ -30,6 +30,9 @@ defmodule IclogWeb.MealChannel do
       error -> {:reply, error, socket}
     end
   end
+  def handle_in( "comment_meal", %{"query" => query, "params" => params }, socket) do
+    {:reply, respond(query, params), socket}
+  end
 
   defp respond(query, params) do
     respond Absinthe.run(query, Schema, variables: params)
