@@ -60,6 +60,15 @@ defmodule Iclog.FeatureCase do
         error_text = Map.get(ops, :error_text) || error_string(:lt, ops.string_len)
         assert visible_text({:id, ops.error_id}) == error_text
       end
+
+      def datetime_picker_select_date(day, unfocus_element) do
+        click {:css, ".elm-input-datepickerCurrentMonth[aria-label^='#{day}']"}
+        click unfocus_element
+
+        # clikc {:css, "[aria-label='hour 3']"}
+        # clikc {:css, "[aria-label='minute 2']"}
+        # clikc {:css, ".elm-input-datepickerSelectedAmPm[aria-label='PM']"}
+      end
     end
   end
 
@@ -105,7 +114,7 @@ defmodule Iclog.FeatureCase do
     "ShorterStringThan #{length}"
   end
 
-  def wait_for_condition(condition, fun, args \\ [], timeout \\ 10000) do
+  def wait_for_condition(condition, fun, args \\ [], timeout \\ 10_000) do
     if condition == apply(fun, args) do
       condition
     else
@@ -136,5 +145,9 @@ defmodule Iclog.FeatureCase do
 
   def datetime_format_str do
     "{WDshort} {0D}/{Mshort}/{YY} {0h12}:{m} {AM}"
+  end
+
+  def list_date_date_regex do
+    ".*{WDshort} {0D}/{Mshort}/{YY}.*{h12}:{m} {AM}.*"
   end
 end

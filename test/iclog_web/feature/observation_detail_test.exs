@@ -21,7 +21,7 @@ defmodule IclogWeb.Feature.ObservationDetailTest do
       id: id_,
       comment: comment,
       inserted_at: inserted_at_
-    } = insert(:observation)
+    } = insert(:observation, comment: "comm")
 
     navigate_to "/#/observations/#{id_}"
 
@@ -88,7 +88,7 @@ defmodule IclogWeb.Feature.ObservationDetailTest do
 
     # when a new date is selected
     inserted_at_updated = Timex.shift inserted_at, days: 1
-    select_date inserted_at_updated.day, comment_control
+    datetime_picker_select_date inserted_at_updated.day, comment_control
 
     # inserted at textbox contains selected date
     inserted_at_updated_str = inserted_at_updated
@@ -100,7 +100,7 @@ defmodule IclogWeb.Feature.ObservationDetailTest do
 
     # when inserted at textbox is changed to original date
     click inserted_at_control
-    select_date inserted_at.day, comment_control
+    datetime_picker_select_date inserted_at.day, comment_control
 
     refute_btns_enabled submit_btn, reset_btn
 
@@ -108,7 +108,7 @@ defmodule IclogWeb.Feature.ObservationDetailTest do
     fill_field comment_control, ""
     type_text updated_comment
     click inserted_at_control
-    select_date inserted_at_updated.day, comment_control
+    datetime_picker_select_date inserted_at_updated.day, comment_control
 
     # and submit_btn is clicked
     click submit_btn
@@ -135,15 +135,6 @@ defmodule IclogWeb.Feature.ObservationDetailTest do
 
     # show edit icon becomes visible
     assert element?(:id, @show_edit_icon_id)
-  end
-
-  defp select_date(day, unfocus_element) do
-    click {:css, ".elm-input-datepickerCurrentMonth[aria-label^='#{day}']"}
-    click unfocus_element
-
-    # clikc {:css, "[aria-label='hour 3']"}
-    # clikc {:css, "[aria-label='minute 2']"}
-    # clikc {:css, ".elm-input-datepickerSelectedAmPm[aria-label='PM']"}
   end
 
   defp assert_btns_enabled(submit_btn, reset_btn) do
