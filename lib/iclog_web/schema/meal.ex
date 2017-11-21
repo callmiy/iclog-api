@@ -94,6 +94,7 @@ defmodule IclogWeb.Schema.Meal do
       arg :id, non_null(:id)
       arg :meal, :string
       arg :time, :string
+      arg :comment, :comment
 
       resolve fn(args, _) ->
         {id, params} = Map.pop(args, :id)

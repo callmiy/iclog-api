@@ -165,6 +165,24 @@ defmodule Iclog.MealTestHelper do
       }
     """
   end
+  def mutation(:meal_update_with_comment) do
+    """
+      mutation ($id: ID!, $meal: String, $time: String, $comment: Comment) {
+        mealUpdate(id: $id, meal: $meal, time: $time, comment: $comment) {
+          id
+          meal
+          time
+          insertedAt
+          updatedAt
+          comments {
+            id
+            text
+            insertedAt
+          }
+        }
+      }
+    """
+  end
   def mutation(:meal_comment, id) do
     query = """
       mutation ($mealId: ID!, $text: String!) {

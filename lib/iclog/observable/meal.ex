@@ -1,7 +1,8 @@
 defmodule Iclog.Observable.Meal do
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query, warn: false
+  import Ecto.Query, warn: false,
+    except: [update: 2, update: 3]
 
   alias Iclog.Repo
   alias Iclog.Observable.Meal
@@ -97,18 +98,19 @@ defmodule Iclog.Observable.Meal do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create(%{comment: nil} = attrs) do
-    {_, attrs_} = Map.pop attrs, :comment
-    create(attrs_)
-  end
-  def create(%{comment: %{text: _}} = attrs) do
+  def create(%{comment: _} = attrs) do
     {comment_, attrs_} = Map.pop attrs, :comment
-    with {:ok, meal} <- create(attrs_),
-         {:ok, comment} <- Repo.insert(Ecto.build_assoc meal, :comments, comment_) do
-     {:ok, %{meal | comments: [comment]}}
+
+    if comment_ == nil do
+      create(attrs_)
+    else
+      with {:ok, meal} <- create(attrs_),
+           {:ok, comment} <- create_comment(meal, comment_) do
+        {:ok, %{meal | comments: [comment]}}
+      end
     end
   end
-  def create(attrs \\ %{}) do
+  def create(attrs) do
     changes = Meal.changeset(%Meal{}, attrs)
 
     with {:ok, meal} <- Repo.insert(changes) do
@@ -128,11 +130,23 @@ defmodule Iclog.Observable.Meal do
       {:error, %Ecto.Changeset{}}
 
   """
+  def update(%Meal{} = meal, %{comment: _} = attrs) do
+    {comment_, attrs_} = Map.pop attrs, :comment
+
+    if comment_ == nil do
+      update(meal, attrs_)
+    else
+      with {:ok, %Meal{comments: comments} = meal_} <- update(meal, attrs_),
+           {:ok, comment} <- create_comment(meal_, comment_) do
+        {:ok, %{meal_ | comments: [comment | comments] } }
+      end
+    end
+  end
   def update(%Meal{} = meal, attrs) do
     chgset = Meal.changeset(meal, attrs)
+
     with {:ok, meal_} <- Repo.update(chgset) do
-      comments = Repo.all Ecto.assoc(meal_, :comments)
-      {:ok, %{meal_ | comments: comments}}
+      {:ok, Repo.preload(meal_, [:comments])}
     end
   end
 

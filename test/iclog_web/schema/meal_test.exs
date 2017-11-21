@@ -252,5 +252,43 @@ defmodule IclogWeb.Schema.MealTest do
       assert {:ok, %{errors: _}} =
         Absinthe.run(mutation(:meal_update), Schema, variables: params)
     end
+
+    test ":meal_update with comment succeeds" do
+      %Meal{
+        id: id_,
+        meal: meal_
+      } = meal_struct = insert(:meal)
+
+      id = Integer.to_string id_
+      meal = "#{meal_}-updated"
+
+      MealCommentFactory.create :comment, meal: meal_struct
+
+      params = %{
+        "id" => id,
+        "meal" => meal,
+        "comment" => %{
+          "text" => "This is another comment"
+        }
+      }
+
+      assert {:ok,
+            %{data:
+              %{"mealUpdate" =>
+                %{
+                    "id" =>^id,
+                    "meal" => ^meal,
+                    "insertedAt" => _,
+                    "updatedAt" => _,
+                    "comments" => comments
+                }
+              }
+            }
+        } =
+      Absinthe.run(mutation(:meal_update_with_comment), Schema, variables: params)
+
+      assert length(comments) == 2
+      assert %{"text" => "This is another comment"} = List.first(comments)
+    end
   end
 end
