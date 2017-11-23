@@ -6,3 +6,4 @@ alias IclogWeb.ObservationChannel
 alias Iclog.Comment
 alias Iclog.Factory
 alias Iclog.Factory.MealComment, as: MealCommentFactory
+alias Iclog.Factory.SleepComment, as: SleepCommentFactory

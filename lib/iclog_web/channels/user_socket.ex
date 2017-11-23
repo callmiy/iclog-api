@@ -4,6 +4,7 @@ defmodule IclogWeb.UserSocket do
   ## Channels
   channel "observation:*", IclogWeb.ObservationChannel
   channel "meal:*", IclogWeb.MealChannel
+  channel "sleep:*", IclogWeb.SleepChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket, timeout: 45_000

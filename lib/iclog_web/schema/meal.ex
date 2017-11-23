@@ -28,7 +28,7 @@ defmodule IclogWeb.Schema.Meal do
     field :updated_at, :i_s_o_datetime
   end
 
-  @desc "List of observations, but paginated"
+  @desc "List of meals, but paginated"
   object :paginated_meal do
     field :entries, list_of(:meal)
     field :pagination, :pagination

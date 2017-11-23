@@ -23,4 +23,17 @@ defmodule IclogWeb.Schema.Types do
     field :page, non_null(:integer)
     field :page_size, :integer
   end
+
+  @desc "A generic comment"
+  object :generic_comment do
+    field :id, :id
+    field :text, :string
+    field :inserted_at, :i_s_o_datetime
+    field :updated_at, :i_s_o_datetime
+  end
+
+  @desc "Params for objects which require generic comment"
+  input_object :comment_params do
+    field :text, non_null(:string)
+  end
 end

@@ -1,8 +1,7 @@
 defmodule Iclog.Observable.Meal do
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query, warn: false,
-    except: [update: 2, update: 3]
+  import Ecto.Query, warn: false
 
   alias Iclog.Repo
   alias Iclog.Observable.Meal
@@ -81,8 +80,7 @@ defmodule Iclog.Observable.Meal do
       nil ->
         nil
       meal ->
-        comments = Repo.all Ecto.assoc(meal, :comments)
-        %{meal | comments: comments}
+        Repo.preload meal, [:comments]
     end
   end
 
@@ -134,9 +132,9 @@ defmodule Iclog.Observable.Meal do
     {comment_, attrs_} = Map.pop attrs, :comment
 
     if comment_ == nil do
-      update(meal, attrs_)
+      Meal.update(meal, attrs_)
     else
-      with {:ok, %Meal{comments: comments} = meal_} <- update(meal, attrs_),
+      with {:ok, %Meal{comments: comments} = meal_} <- Meal.update(meal, attrs_),
            {:ok, comment} <- create_comment(meal_, comment_) do
         {:ok, %{meal_ | comments: [comment | comments] } }
       end

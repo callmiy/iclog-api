@@ -18,6 +18,7 @@ defmodule Iclog.DataCase do
     quote do
       alias Iclog.Repo
       alias Iclog.Factory.MealComment, as: MealCommentFactory
+      alias Iclog.Factory.SleepComment, as: SleepCommentFactory
 
       import Ecto
       import Ecto.Changeset

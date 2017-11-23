@@ -11,13 +11,11 @@ defmodule IclogWeb.Schema.MealTest do
       %Meal{
         id: id_,
         meal: meal,
-        time: _time_
-      } = meal_ = insert(:meal)
-
-      %Comment{
-        id: comment_id_,
-        text: text
-      } = MealCommentFactory.create :comment, meal: meal_
+        comments: [%Comment{
+          id: comment_id_,
+          text: text
+        }]
+      } = insert(:meal_with_comment)
 
       id = Integer.to_string id_
       comment_id = Integer.to_string comment_id_
@@ -56,11 +54,10 @@ defmodule IclogWeb.Schema.MealTest do
     test "meals" do
       %Meal{
         id: id_,
-        meal: meal,
-        time: _time_
+        meal: meal
       } = meal_ = insert(:meal)
 
-      _comments = MealCommentFactory.create_list 3, :comment, meal: meal_
+      MealCommentFactory.create_list 3, :comment, meal: meal_
 
       id = Integer.to_string id_
 
@@ -113,9 +110,7 @@ defmodule IclogWeb.Schema.MealTest do
     end
 
     test ":paginated_meals page number 2 succeeds" do
-      insert_list(11, :meal)
-      |> Enum.each(&MealCommentFactory.create(:comment, meal: &1))
-
+      insert_list(11, :meal_with_comment)
       {query, params} = query(:paginated_meals, 2)
 
       {:ok, %{
@@ -209,7 +204,7 @@ defmodule IclogWeb.Schema.MealTest do
 
       time = time_
       |> Timex.shift(minutes: 5)
-      |> Timex.format!("{ISO:Extended:Z}")
+      |> format_iso_extended()
 
       %Comment{
         id: comment_id_,
@@ -257,12 +252,10 @@ defmodule IclogWeb.Schema.MealTest do
       %Meal{
         id: id_,
         meal: meal_
-      } = meal_struct = insert(:meal)
+      } = insert(:meal_with_comment)
 
       id = Integer.to_string id_
       meal = "#{meal_}-updated"
-
-      MealCommentFactory.create :comment, meal: meal_struct
 
       params = %{
         "id" => id,
