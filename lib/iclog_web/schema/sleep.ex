@@ -62,7 +62,7 @@ defmodule IclogWeb.Schema.Sleep do
     @desc "Create a sleep and may be with comment simulatenously"
     field :sleep, type: :sleep do
       arg :start, non_null(:string)
-      arg :end, non_null(:string)
+      arg :end, :string
       arg :comment, :comment_params
 
       resolve fn(params, _) ->
@@ -70,7 +70,7 @@ defmodule IclogWeb.Schema.Sleep do
           {:ok, data}
         else
           {:error, changeset} ->
-            {:ok,  View.render(ChangesetView, "error.json", changeset: changeset)} # {:ok, %{errors: ....}}
+            {:error,  changeset_errors_to_string(changeset)}
         end
       end
     end
@@ -94,7 +94,7 @@ defmodule IclogWeb.Schema.Sleep do
               {:ok, data}
             else
               {:error, changeset} ->
-                {:error,  View.render(ChangesetView, "error.json", changeset: changeset)}
+                {:error,  changeset_errors_to_string(changeset)}
             end
         end
       end
@@ -114,5 +114,15 @@ defmodule IclogWeb.Schema.Sleep do
         end
       end
     end
+  end
+
+  defp changeset_errors_to_string(%Ecto.Changeset{} =  changeset) do
+    Enum.map_join(
+      View.render(ChangesetView, "error.json", changeset: changeset)[:errors],
+      "|",
+      fn({k, v}) ->
+        value = Enum.join(v, ",")
+        "#{k}:#{value}"
+      end)
   end
 end

@@ -134,7 +134,7 @@ defmodule Iclog.SleepTestHelper do
   end
   def mutation(:sleep, start \\ nil, end_ \\ nil) do
     query = """
-      mutation ($start: String!, $end: String!) {
+      mutation ($start: String!, $end: String) {
         sleep(start: $start, end: $end) {
           id
           start
@@ -151,7 +151,7 @@ defmodule Iclog.SleepTestHelper do
     """
 
     params =
-      if start == nil do
+      if start == nil && end_ == nil do
         %{"start" => ""}
       else
         %{

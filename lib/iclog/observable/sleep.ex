@@ -105,12 +105,15 @@ defmodule Iclog.Observable.Sleep do
       end
     end
   end
-  def create(attrs) do
+  def create(%{end: _} = attrs) do
     changes = Sleep.changeset(%Sleep{}, attrs)
 
     with {:ok, sleep} <- Repo.insert(changes) do
       {:ok, Repo.preload(sleep, [:comments])}
     end
+  end
+  def create(%{start: start} = attrs) do
+    create(Map.put attrs, :end, start)
   end
 
   @doc """
