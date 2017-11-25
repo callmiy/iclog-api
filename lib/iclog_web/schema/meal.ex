@@ -9,21 +9,12 @@ defmodule IclogWeb.Schema.Meal do
   alias IclogWeb.ChangesetView
   alias Phoenix.View
 
-  @desc "A meal comment"
-  object :meal_comment do
-    field :id, :id
-    field :text, :string
-    # field :meal, :meal -- may be later if required
-    field :inserted_at, :i_s_o_datetime
-    field :updated_at, :i_s_o_datetime
-  end
-
   @desc "A meal"
   object :meal do
     field :id, :id
     field :meal, :string
     field :time, :i_s_o_datetime
-    field :comments, list_of(:meal_comment)
+    field :comments, list_of(:generic_comment)
     field :inserted_at, :i_s_o_datetime
     field :updated_at, :i_s_o_datetime
   end
@@ -64,10 +55,6 @@ defmodule IclogWeb.Schema.Meal do
         {:ok, Meal.list_all(pagination_params)}
       end
     end
-  end
-
-  input_object :comment do
-    field :text, non_null(:string)
   end
 
   @desc "Create a meal"
@@ -116,7 +103,7 @@ defmodule IclogWeb.Schema.Meal do
     end
 
     @desc "Create a comment for a meal"
-    field :meal_comment, type: :meal_comment do
+    field :meal_comment, type: :generic_comment do
       arg :meal_id, non_null(:id)
       arg :text, non_null(:string)
 

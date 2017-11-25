@@ -63,7 +63,7 @@ defmodule IclogWeb.Schema.Sleep do
     field :sleep, type: :sleep do
       arg :start, non_null(:string)
       arg :end, :string
-      arg :comment, :comment_params
+      arg :comment, :comment
 
       resolve fn(params, _) ->
         with {:ok, data} <- Sleep.create(params) do
@@ -80,7 +80,7 @@ defmodule IclogWeb.Schema.Sleep do
       arg :id, non_null(:id)
       arg :start, :string
       arg :end, :string
-      arg :comment, :comment_params
+      arg :comment, :comment
 
       resolve fn(args, _) ->
         {id, params} = Map.pop(args, :id)

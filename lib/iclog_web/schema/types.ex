@@ -33,7 +33,7 @@ defmodule IclogWeb.Schema.Types do
   end
 
   @desc "Params for objects which require generic comment"
-  input_object :comment_params do
+  input_object :comment do
     field :text, non_null(:string)
   end
 end
