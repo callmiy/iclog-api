@@ -46,7 +46,7 @@ defmodule Iclog.SleepTestHelper do
   end
   def query(:paginated_sleeps, page_number) do
     query = """
-      query ($pagination: PaginationParams!) {
+      query ($pagination: Pagination!) {
         paginatedSleeps(
           pagination: $pagination
         ) {

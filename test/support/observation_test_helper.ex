@@ -19,7 +19,7 @@ defmodule Iclog.ObservationTestHelper do
   end
   def query(:paginated_observations, page_number) do
     query = """
-      query ($pagination: PaginationParams!) {
+      query ($pagination: Pagination!) {
         paginatedObservations(
           pagination: $pagination
         ) {

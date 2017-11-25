@@ -22,7 +22,7 @@ defmodule IclogWeb.Schema.Sleep do
   @desc "List of sleeps, but paginated"
   object :paginated_sleep do
     field :entries, list_of(:sleep)
-    field :pagination, :pagination
+    field :pagination, :generic_pagination
   end
 
   object :sleep_queries do
@@ -47,7 +47,7 @@ defmodule IclogWeb.Schema.Sleep do
     end
 
     field :paginated_sleeps, :paginated_sleep do
-      arg :pagination, non_null(:pagination_params)
+      arg :pagination, non_null(:pagination)
 
       resolve fn(args, _info) ->
         pagination_params = Map.get(args, :pagination, %{})

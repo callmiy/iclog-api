@@ -12,14 +12,14 @@ defmodule IclogWeb.Schema.Types do
     serialize &Timex.format!(&1, "{ISO:Extended:Z}")
   end
 
-  object :pagination do
+  object :generic_pagination do
     field :page_number, non_null(:integer)
     field :page_size, non_null(:integer)
     field :total_pages, non_null(:integer)
     field :total_entries, non_null(:integer)
   end
 
-  input_object :pagination_params do
+  input_object :pagination do
     field :page, non_null(:integer)
     field :page_size, :integer
   end

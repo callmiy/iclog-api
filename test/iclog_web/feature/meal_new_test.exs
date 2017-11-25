@@ -43,7 +43,7 @@ defmodule IclogWeb.Feature.MealNewTest do
     assert element_enabled?(submit_btn)
     click submit_btn
 
-    :timer.sleep 80
+    :timer.sleep 1
 
     # Meal is created
     assert wait_for_condition(
@@ -52,8 +52,8 @@ defmodule IclogWeb.Feature.MealNewTest do
         case Meal.list() do
           [] ->
             false
-          [meal] ->
-            meal.meal == @meal_text
+          [%Meal{meal: meal}] ->
+            meal == @meal_text
         end
       end
     )

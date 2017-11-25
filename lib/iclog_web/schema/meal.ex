@@ -22,7 +22,7 @@ defmodule IclogWeb.Schema.Meal do
   @desc "List of meals, but paginated"
   object :paginated_meal do
     field :entries, list_of(:meal)
-    field :pagination, :pagination
+    field :pagination, :generic_pagination
   end
 
   object :meal_query do
@@ -48,7 +48,7 @@ defmodule IclogWeb.Schema.Meal do
     end
 
     field :paginated_meals, :paginated_meal do
-      arg :pagination, non_null(:pagination_params)
+      arg :pagination, non_null(:pagination)
 
       resolve fn(args, _info) ->
         pagination_params = Map.get(args, :pagination, nil)

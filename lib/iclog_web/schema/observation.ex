@@ -21,7 +21,7 @@ defmodule IclogWeb.Schema.Observation do
 
   object :paginated_observation do
     field :entries, list_of(:observation)
-    field :pagination, :pagination
+    field :pagination, :generic_pagination
   end
 
   object :observation_query do
@@ -50,7 +50,7 @@ defmodule IclogWeb.Schema.Observation do
     end
 
     field :paginated_observations, :paginated_observation do
-      arg :pagination, non_null(:pagination_params)
+      arg :pagination, non_null(:pagination)
 
       resolve fn(args, _info) ->
         pagination_params = Map.get(args, :pagination, nil)

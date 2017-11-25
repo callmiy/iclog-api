@@ -43,7 +43,7 @@ defmodule Iclog.MealTestHelper do
   end
   def query(:paginated_meals, page_number) do
     query = """
-      query ($pagination: PaginationParams!) {
+      query ($pagination: Pagination!) {
         paginatedMeals(
           pagination: $pagination
         ) {
