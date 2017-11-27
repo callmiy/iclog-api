@@ -6,7 +6,6 @@ defmodule IclogWeb.Feature.MealNewTest do
   @navigate_to "/#/meals/new"
   @submit_btn_name "new-meal-submit-btn"
   @meal_text "Meal1"
-  @success_msg_regex ~r/.*Success! Click here for further details\..*/
   @meal_control_error_text "Meal must be at least 3 characters."
   @meal_control_error_id "new-meal-input-error-id"
   @meal_control_id "new-meal-input"
@@ -43,7 +42,7 @@ defmodule IclogWeb.Feature.MealNewTest do
     assert element_enabled?(submit_btn)
     click submit_btn
 
-    :timer.sleep 1
+    :timer.sleep 100
 
     # Meal is created
     assert wait_for_condition(
@@ -58,9 +57,6 @@ defmodule IclogWeb.Feature.MealNewTest do
       end
     )
 
-    assert wait_for_condition(
-      true,
-      fn() -> visible_in_page?(@success_msg_regex) end
-    )
+    assert visible_in_page?(@success_msg_regex)
   end
 end

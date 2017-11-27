@@ -7,6 +7,7 @@ defmodule Iclog.FeatureCase do
 
       alias Iclog.Repo
       alias Iclog.Factory.MealComment, as: MealCommentFactory
+      alias Iclog.Factory.SleepComment, as: SleepCommentFactory
 
       import IclogWeb.Router.Helpers
       import Iclog.TestHelper
@@ -14,6 +15,11 @@ defmodule Iclog.FeatureCase do
       import Iclog.FeatureCase
 
       @endpoint IclogWeb.Endpoint
+
+      @success_msg_regex ~r/.*Success! Click here for further details\..*/
+      @pagination_regex ~r/.*Page 1 of 2.*/
+      @next_page_arrow_id "pagination-next-page-arrow"
+      @success_click_to_dismiss_regex ~r/.*Success! Click to dismiss\..*/
 
       def assert_controls_empty(controls) do
         Enum.each controls, fn(control) ->

@@ -15,13 +15,12 @@ defmodule IclogWeb.Feature.MealDetailTest do
   @new_comment_text_regex ~r/.*Comy.*/
   @add_comment_submit_icon_id "meal-detail-add-comment-submit"
   @edit_meal_text_id "edit-meal-input"
-  @edit_meal_time_id "edit-meal-time"
+  @edit_meal_time_id "detail-meal-edit-time"
   @edit_meal_icon_id "detail-meal-show-edit-display"
   @new_meal_text "Mey"
   @edit_meal_add_comment_icon_id "comment-edit-view-helper-reveal-composite-comment-id"
   @edit_meal_comment_id "edit-meal-comment"
   @edit_meal_submit_btn_id "edit-meal-submit-btn"
-  @edit_success_msg_regex ~r/.*Success! Click to dismiss\..*/
   @edit_meal_view_title_regex ~r/.*Edit meal.*/
   @comment_display_class "viewing-comment"
 
@@ -41,10 +40,10 @@ defmodule IclogWeb.Feature.MealDetailTest do
     navigate_to "/#/meals/#{id_}"
 
     {_time, time_str}= timex_ecto_date_to_local_tz time_
-    time_regex = ".*#{time_str}.*"
+    time_regex = Regex.compile! ".*#{time_str}.*"
 
     {_inserted_at, inserted_at_str}= timex_ecto_date_to_local_tz inserted_at_
-    inserted_at_regex = ".*#{inserted_at_str}.*"
+    inserted_at_regex = Regex.compile! ".*#{inserted_at_str}.*"
 
     # The page subtitle is visible
     assert wait_for_condition(
@@ -59,12 +58,12 @@ defmodule IclogWeb.Feature.MealDetailTest do
     )
 
     # And meal time is visible in page
-    assert visible_in_page?(Regex.compile! time_regex)
+    assert visible_in_page?(time_regex)
 
     # And comment text is visible in page
     assert visible_in_page?(@comment_text_regex)
     # And meal comment time is visible in page
-    assert visible_in_page?(Regex.compile! inserted_at_regex)
+    assert visible_in_page?(inserted_at_regex)
 
     # When add comment icon is clicked
     click {:id, @add_comment_icon_id}
@@ -122,7 +121,7 @@ defmodule IclogWeb.Feature.MealDetailTest do
     refute element?(:class, @comment_display_class)
 
     # When meal text box is edited
-    clear_field meal_control
+    fill_field meal_control, ""
     fill_field meal_control, @new_meal_text
 
     # And time field is edited
@@ -141,7 +140,7 @@ defmodule IclogWeb.Feature.MealDetailTest do
     assert wait_for_condition(
       true,
       fn() ->
-        visible_in_page?(@edit_success_msg_regex)
+        visible_in_page?(@success_click_to_dismiss_regex)
       end
     )
 

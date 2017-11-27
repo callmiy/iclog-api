@@ -27,19 +27,20 @@ defmodule IclogWeb.Feature.ObservationDetailTest do
 
     {inserted_at, inserted_at_str}= timex_ecto_date_to_local_tz inserted_at_
 
-    comment_regex = ".*#{comment}.*"
-    inserted_at_regex = ".*#{inserted_at_str}.*"
+    comment_regex = Regex.compile! ".*#{comment}.*"
+    inserted_at_regex = Regex.compile! ".*#{inserted_at_str}.*"
 
     # Comment is visible in page
     assert wait_for_condition(
       true,
       fn() ->
-        visible_in_page?(Regex.compile! comment_regex)
+        visible_in_page?(comment_regex)
       end,
       []
     )
+
     # Inserted at datetime is visible on page
-    assert visible_in_page?(Regex.compile! inserted_at_regex)
+    assert visible_in_page?(inserted_at_regex)
 
     # When show edit icon is clicked
     click {:id, @show_edit_icon_id}

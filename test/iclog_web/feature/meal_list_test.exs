@@ -5,11 +5,9 @@ defmodule IclogWeb.Feature.MealListTest do
 
   alias Iclog.Observable.Meal
 
-  @pagination_regex ~r/.*Page 1 of 2.*/
   @meal_text "The very first meal"
   @navigate_to "/#/meals"
   @detail_link_class "meal-list-to-meal-detail-link"
-  @next_page_arrow_id "pagination-next-page-arrow"
 
   @tag :integration
   # @tag :no_headless
