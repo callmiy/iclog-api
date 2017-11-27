@@ -3,6 +3,9 @@ defmodule IclogWeb.ObservationChannel do
 
   alias IclogWeb.Schema
 
+  def join("observation:main", _params, socket) do
+    {:ok, socket}
+  end
   def join("observation:observation", %{"params" => params, "query" => query}, socket) do
     {_, reply} = respond(query, params)
     {:ok, reply, socket}
