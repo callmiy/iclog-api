@@ -25,7 +25,7 @@ defmodule IclogWeb.Feature.ObservationDetailTest do
 
     navigate_to "/#/observations/#{id_}"
 
-    {inserted_at, inserted_at_str}= timex_ecto_date_to_local_tz inserted_at_
+    {inserted_at, inserted_at_str}= timex_ecto_date_to_local_tz_formatted inserted_at_
 
     comment_regex = Regex.compile! ".*#{comment}.*"
     inserted_at_regex = Regex.compile! ".*#{inserted_at_str}.*"
@@ -122,7 +122,7 @@ defmodule IclogWeb.Feature.ObservationDetailTest do
           nil ->
             false
           obs ->
-            {_, date} = timex_ecto_date_to_local_tz obs.inserted_at
+            {_, date} = timex_ecto_date_to_local_tz_formatted obs.inserted_at
             obs.comment == updated_comment && date == inserted_at_updated_str
         end
       end

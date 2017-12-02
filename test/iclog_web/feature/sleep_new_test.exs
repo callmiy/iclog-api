@@ -43,6 +43,8 @@ defmodule IclogWeb.Feature.SleepNewTest do
     )
   end
 
+  @tag :integration
+  # @tag :no_headless
   test "Create a sleep with comment", _meta do
     navigate_to @navigate_to
 
@@ -52,7 +54,7 @@ defmodule IclogWeb.Feature.SleepNewTest do
 
     # when comment box is completed
     fill_field comment_control, ""
-    type_text @comment_text
+    type_text @comment_text, 20
 
     # And submit button is clicked
     click find_element(:name, @submit_btn_name)
@@ -63,7 +65,7 @@ defmodule IclogWeb.Feature.SleepNewTest do
     assert wait_for_condition(
       true,
       fn() ->
-        case Sleep.list() do
+        case Sleep.list_all() do
           [] ->
             false
           [%Sleep{comments: [%Comment{text: text}] }] ->

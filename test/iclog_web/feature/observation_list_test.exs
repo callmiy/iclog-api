@@ -33,12 +33,12 @@ defmodule IclogWeb.Feature.ObservationListTest do
 
     navigate_to "/#/"
 
-    {inserted_at_first, _} = timex_ecto_date_to_local_tz(inserted_at_first_)
+    {inserted_at_first, _} = timex_ecto_date_to_local_tz_formatted(inserted_at_first_)
     _inserted_at_first_regex = Timex.format!(inserted_at_first, list_date_date_regex())
     comment_first_regex = ".*#{comment_first}.*"
     title_first_regex = ".*#{title_first}.*"
 
-    {inserted_at_last, _} = timex_ecto_date_to_local_tz(inserted_at_last_)
+    {inserted_at_last, _} = timex_ecto_date_to_local_tz_formatted(inserted_at_last_)
     inserted_at_last_regex = Timex.format!(inserted_at_last, list_date_date_regex())
     comment_last_regex = ".*#{comment_last}.*"
     title_last_regex = ".*#{title_last}.*"

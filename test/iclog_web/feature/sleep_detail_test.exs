@@ -38,16 +38,16 @@ defmodule IclogWeb.Feature.SleepDetailTest do
     # When we visit detail page
     navigate_to "/#/sleeps/#{id_}"
 
-    {start_time, start_str} = timex_ecto_date_to_local_tz start_
+    {start_time, start_str} = timex_ecto_date_to_local_tz_formatted start_
     start_regex = Regex.compile! ".*#{start_str}.*"
 
-    {end_time, end_str} = timex_ecto_date_to_local_tz end_
+    {end_time, end_str} = timex_ecto_date_to_local_tz_formatted end_
     end_regex = Regex.compile! ".*#{end_str}.*"
 
     duration = Timex.diff end_time, start_time, :hours
     duration_regex = Regex.compile! ".*#{duration} hrs.*"
 
-    {_, inserted_at_str} = timex_ecto_date_to_local_tz inserted_at_
+    {_, inserted_at_str} = timex_ecto_date_to_local_tz_formatted inserted_at_
     inserted_at_regex = Regex.compile! ".*#{inserted_at_str}.*"
 
     # The page subtitle is visible
@@ -106,8 +106,8 @@ defmodule IclogWeb.Feature.SleepDetailTest do
     # When we visit sleep detail page
     navigate_to "/#/sleeps/#{id_}"
 
-    {start_time, start_str} = timex_ecto_date_to_local_tz start_
-    {end_time, end_str} = timex_ecto_date_to_local_tz end_
+    {start_time, start_str} = timex_ecto_date_to_local_tz_formatted start_
+    {end_time, end_str} = timex_ecto_date_to_local_tz_formatted end_
 
     # And click on edit icon
     click {:id, @edit_sleep_icon_id}
@@ -157,12 +157,12 @@ defmodule IclogWeb.Feature.SleepDetailTest do
 
     # And sleep is updated in the database
     sleep = Sleep.get!(id_)
-    {_, start_str_db} = timex_ecto_date_to_local_tz sleep.start
-    {_, start_str_new} = timex_ecto_date_to_local_tz new_start_time
+    {_, start_str_db} = timex_ecto_date_to_local_tz_formatted sleep.start
+    {_, start_str_new} = timex_ecto_date_to_local_tz_formatted new_start_time
     assert start_str_db == start_str_new
 
-    {_, end_str_db} = timex_ecto_date_to_local_tz sleep.end
-    {_, end_str_new} = timex_ecto_date_to_local_tz new_end_time
+    {_, end_str_db} = timex_ecto_date_to_local_tz_formatted sleep.end
+    {_, end_str_new} = timex_ecto_date_to_local_tz_formatted new_end_time
     assert end_str_db == end_str_new
   end
 end

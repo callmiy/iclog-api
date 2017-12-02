@@ -39,10 +39,10 @@ defmodule IclogWeb.Feature.MealDetailTest do
     # When we visit meal detail page
     navigate_to "/#/meals/#{id_}"
 
-    {_time, time_str}= timex_ecto_date_to_local_tz time_
+    {_time, time_str}= timex_ecto_date_to_local_tz_formatted time_
     time_regex = Regex.compile! ".*#{time_str}.*"
 
-    {_inserted_at, inserted_at_str}= timex_ecto_date_to_local_tz inserted_at_
+    {_inserted_at, inserted_at_str}= timex_ecto_date_to_local_tz_formatted inserted_at_
     inserted_at_regex = Regex.compile! ".*#{inserted_at_str}.*"
 
     # The page subtitle is visible
@@ -96,7 +96,7 @@ defmodule IclogWeb.Feature.MealDetailTest do
     # When we visit meal detail page
     navigate_to "/#/meals/#{id_}"
 
-    {time, time_str} = timex_ecto_date_to_local_tz time_
+    {time, time_str} = timex_ecto_date_to_local_tz_formatted time_
 
     # And click on edit icon
     click {:id, @edit_meal_icon_id}
@@ -152,8 +152,8 @@ defmodule IclogWeb.Feature.MealDetailTest do
 
     assert meal.meal == @new_meal_text
 
-    {_, time_str_db} = timex_ecto_date_to_local_tz meal.time
-    {_, time_str_new} = timex_ecto_date_to_local_tz new_time
+    {_, time_str_db} = timex_ecto_date_to_local_tz_formatted meal.time
+    {_, time_str_new} = timex_ecto_date_to_local_tz_formatted new_time
     assert time_str_db == time_str_new
   end
 end

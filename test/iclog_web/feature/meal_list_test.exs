@@ -28,11 +28,11 @@ defmodule IclogWeb.Feature.MealListTest do
 
     navigate_to @navigate_to
 
-    {time_first, _} = timex_ecto_date_to_local_tz(time_first_)
+    {time_first, _} = timex_ecto_date_to_local_tz_formatted(time_first_)
     _time_first_regex = Timex.format!(time_first, list_date_date_regex())
     meal_text_first_regex = ".*#{meal_text_first}.*"
 
-    {time_last, _} = timex_ecto_date_to_local_tz(time_last_)
+    {time_last, _} = timex_ecto_date_to_local_tz_formatted(time_last_)
     time_last_regex = Timex.format!(time_last, list_date_date_regex())
     meal_text_last_regex = ".*#{meal_text_last}.*"
 

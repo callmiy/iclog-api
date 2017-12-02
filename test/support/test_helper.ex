@@ -18,7 +18,7 @@ defmodule Iclog.TestHelper do
     |> Timex.to_datetime(Timex.Timezone.local())
   end
 
-  def timex_ecto_date_to_local_tz(date) do
+  def timex_ecto_date_to_local_tz_formatted(date) do
     date_ = timex_ecto_date_to_local_datime_tz(date)
 
     date_str = date_

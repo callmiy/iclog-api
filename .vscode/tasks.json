@@ -6,7 +6,7 @@
   },
   "tasks": [
     {
-      "label": "mix compile",
+      "label": "mix compile win",
       "type": "shell",
       "command": "dev.bat && mix compile",
       "problemMatcher": [
@@ -19,9 +19,29 @@
       }
     },
     {
-      "label": "mix get compile",
+      "label": "mix compile deb",
+      "type": "shell",
+      "command": "mix compile",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "mix get compile win",
       "type": "shell",
       "command": "dev.bat && mix do deps.get, compile",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "mix get compile deb",
+      "type": "shell",
+      "command": "mix do deps.get, compile",
       "problemMatcher": [
         "$mixCompileError",
         "$mixCompileWarning"
@@ -29,13 +49,25 @@
       "group": "build"
     },
     {
-      "label": "mix test unit",
+      "label": "mix test unit win",
       "type": "shell",
       "command": "dev.bat && mix test",
       "problemMatcher": [
         "$mixCompileError",
-        "$mixCompileWarning",
-        "$mixTestFailure"
+        "$mixCompileWarning"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "mix test unit deb",
+      "type": "shell",
+      "command": "mix test",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning"
       ],
       "group": {
         "kind": "test",
@@ -48,13 +80,12 @@
       "command": "mix test ${file}",
       "problemMatcher": [
         "$mixCompileError",
-        "$mixCompileWarning",
-        "$mixTestFailure"
+        "$mixCompileWarning"
       ],
       "group": "test"
     },
     {
-      "label": "mix test integration",
+      "label": "mix test integration win",
       "type": "shell",
       "command": "dev.bat && cd ..\\front-end-web && yarn build && node scripts/copy-backend.js && cd ${workspaceFolder} && mix test --only integration",
       "options": {
@@ -65,13 +96,28 @@
       },
       "problemMatcher": [
         "$mixCompileError",
-        "$mixCompileWarning",
-        "$mixTestFailure"
+        "$mixCompileWarning"
       ],
       "group": "test"
     },
     {
-      "label": "mix test integration no build",
+      "label": "mix test integration deb",
+      "type": "shell",
+      "command": "cd ../front-end-web && yarn build && node scripts/copy-backend.js && cd ${workspaceFolder} && mix test --only integration",
+      "options": {
+        "env": {
+          "ICLOG_PHOENIX_INTEGRATION_TEST_PORT": "4014",
+          "ELM_APP_API_URL": "http://localhost:4014/api"
+        }
+      },
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "mix test integration no build win",
       "type": "shell",
       "command": "dev.bat && mix test --only integration",
       "options": {
@@ -81,13 +127,27 @@
       },
       "problemMatcher": [
         "$mixCompileError",
-        "$mixCompileWarning",
-        "$mixTestFailure"
+        "$mixCompileWarning"
       ],
       "group": "test"
     },
     {
-      "label": "mix test file integration",
+      "label": "mix test integration no build deb",
+      "type": "shell",
+      "command": "mix test --only integration",
+      "options": {
+        "env": {
+          "ICLOG_PHOENIX_INTEGRATION_TEST_PORT": "4014"
+        }
+      },
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "mix test file integration win",
       "type": "shell",
       "command": "cd ..\\front-end-web && yarn build && node scripts/copy-backend.js && cd ${workspaceFolder} && mix test --only integration ${file}",
       "options": {
@@ -98,8 +158,23 @@
       },
       "problemMatcher": [
         "$mixCompileError",
-        "$mixCompileWarning",
-        "$mixTestFailure"
+        "$mixCompileWarning"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "mix test file integration deb",
+      "type": "shell",
+      "command": "cd ../front-end-web && yarn build && node scripts/copy-backend.js && cd ${workspaceFolder} && mix test --only integration ${file}",
+      "options": {
+        "env": {
+          "ICLOG_PHOENIX_INTEGRATION_TEST_PORT": "4014",
+          "ELM_APP_API_URL": "http://localhost:4014/api"
+        }
+      },
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning"
       ],
       "group": "test"
     },
@@ -114,13 +189,12 @@
       },
       "problemMatcher": [
         "$mixCompileError",
-        "$mixCompileWarning",
-        "$mixTestFailure"
+        "$mixCompileWarning"
       ],
       "group": "test"
     },
     {
-      "label": "start backend",
+      "label": "start backend win",
       "type": "shell",
       "command": "iex --werl -S mix phx.server",
       "options": {
@@ -130,8 +204,22 @@
       },
       "problemMatcher": [
         "$mixCompileError",
-        "$mixCompileWarning",
-        "$mixTestFailure"
+        "$mixCompileWarning"
+      ],
+      "group": "build"
+    },
+    {
+      "label": "start backend deb",
+      "type": "shell",
+      "command": "iex -S mix phx.server",
+      "options": {
+        "env": {
+          "ICLOG_PHOENIX_PORT": "4013"
+        }
+      },
+      "problemMatcher": [
+          "$mixCompileError",
+          "$mixCompileWarning"
       ],
       "group": "build"
     }

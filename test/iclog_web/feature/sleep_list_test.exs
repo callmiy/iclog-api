@@ -28,19 +28,19 @@ defmodule IclogWeb.Feature.SleepListTest do
 
     navigate_to @navigate_to
 
-    {start_first, _} = timex_ecto_date_to_local_tz(start_first_)
+    {start_first, _} = timex_ecto_date_to_local_tz_formatted(start_first_)
     start_first_regex = Regex.compile!(
       Timex.format!(start_first, list_date_date_regex()), "s"
     )
 
-    {start_last, _} = timex_ecto_date_to_local_tz(start_last_)
+    {start_last, _} = timex_ecto_date_to_local_tz_formatted(start_last_)
     start_last_regex = Regex.compile!(
       Timex.format!(start_last, list_date_date_regex()), "s"
     )
 
-    {_end_first, _} = timex_ecto_date_to_local_tz(end_first_)
+    {_end_first, _} = timex_ecto_date_to_local_tz_formatted(end_first_)
 
-    {end_last, _} = timex_ecto_date_to_local_tz(end_last_)
+    {end_last, _} = timex_ecto_date_to_local_tz_formatted(end_last_)
     end_last_regex = Regex.compile!(
       Timex.format!(end_last, list_date_date_regex()), "s"
     )

@@ -191,12 +191,9 @@ defmodule IclogWeb.Feature.ObservationNewTest do
   end
 
   defp complete_title_via_auto_complete(control) do
-    # Autocomplete menu is not yet revealed
-    refute element? :class, "autocompleteAutocompleteItem"
-
     # When a at least 3 characters have been entered into the title field
     fill_field control, ""
-    type_text "som", 2
+    type_text "som", 20
 
     # Autocomplete menu is revealed
     auto_complete = find_element :class, "autocompleteAutocompleteItem"
@@ -210,8 +207,5 @@ defmodule IclogWeb.Feature.ObservationNewTest do
       fn() -> attribute_value(control, "value") == @title_text end,
       []
     )
-
-    # Autocomplete menu is no longer visible
-    refute element? :class, "autocompleteAutocompleteItem"
   end
 end

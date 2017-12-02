@@ -68,7 +68,8 @@ defmodule Iclog.FeatureCase do
       end
 
       def datetime_picker_select_date(day, unfocus_element) do
-        click {:css, ".elm-input-datepickerCurrentMonth[aria-label^='#{day}']"}
+        day = String.pad_leading "#{day}", 2
+        click {:css, ".elm-input-datepickerCurrentMonth[aria-label^='#{day},']"}
         click unfocus_element
 
         # clikc {:css, "[aria-label='hour 3']"}
